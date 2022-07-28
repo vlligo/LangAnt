@@ -28,3 +28,8 @@ void Colours::reset() {
     pm.fill();
     update();
 }
+
+void Colours::quit() {
+//    this->destroy();
+    this->close();
+}

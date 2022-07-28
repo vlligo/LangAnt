@@ -10,6 +10,7 @@ public:
     explicit Colours(QWidget *parent = nullptr);
     void next(int t);
     void reset();
+    void quit();
 protected:
     void paintEvent(QPaintEvent *e) override;
 

@@ -136,7 +136,21 @@ int main(int argc, char* argv[]) {
     auto* button_next_custom = new QPushButton("Next custom", c);
     button_next_custom->setGeometry(400, 0, 100, 50);
     QWidget::connect(button_next_custom, &QPushButton::pressed, c, next_custom_turns);
-    button_next_1000->show();
+    auto clear_field = [&]() {
+        window.reset();
+    };
+    auto* button_clear = new QPushButton("Clear", c);
+    button_clear->setGeometry(500, 0, 100, 50);
+    QWidget::connect(button_clear, &QPushButton::pressed, c, clear_field);
+    button_clear->show();
+    auto quit_all = [&]() {
+        window.quit();
+        c->close();
+    };
+    auto* button_quit = new QPushButton("Quit", c);
+    button_quit->setGeometry(600, 0, 100, 50);
+    QWidget::connect(button_quit, &QPushButton::pressed, c, quit_all);
+    button_quit->show();
     window.show();
     c->show();
     return QApplication::exec();
