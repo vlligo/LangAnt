@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     window.setWindowTitle("Ant field");
 
     auto* label_command = new QLabel(c);
-    QString command = "R1R2L3";
+    QString command = "RL";
     window.command = command;
     QString pref = "Current command is: ";
     label_command->setText(pref + command);
@@ -51,17 +51,17 @@ int main(int argc, char* argv[]) {
         if (ok && !text.isEmpty()) {
             QString tot_text = pref + text;
             // check if command is invalid
-            if (text.size() % 2 == 1) {
-                tot_text = "Invalid input.\n" + pref + command;
-                label_command->resize(
-                        (tot_text.size() - 14) * one_char_len,
-                        label_command->height());
-                label_command->setText(tot_text);
-                c->resize(std::max(c->width(), label_command->width() + 10), c->height());
-                return;
-            }
+//            if (text.size() % 2 == 1) {
+//                tot_text = "Invalid input.\n" + pref + command;
+//                label_command->resize(
+//                        (tot_text.size() - 14) * one_char_len,
+//                        label_command->height());
+//                label_command->setText(tot_text);
+//                c->resize(std::max(c->width(), label_command->width() + 10), c->height());
+//                return;
+//            }
             for (auto i = 0; i < (int)text.size(); i++) {
-                if (i % 2 == 0) {
+//                if (i % 2 == 0) {
                     if (text[i] != 'L' && text[i] != 'R') {
                         tot_text = "Invalid input.\n" + pref + command;
                         label_command->resize(
@@ -71,17 +71,17 @@ int main(int argc, char* argv[]) {
                         c->resize(std::max(c->width(), label_command->width() + 10), c->height());
                         return;
                     }
-                } else {
-                    if (!isdigit(text.at(i).QChar::toLatin1()))  {
-                        tot_text = "Invalid input.\n" + pref + command;
-                        label_command->resize(
-                                (tot_text.size() - 14) * one_char_len,
-                                label_command->height());
-                        label_command->setText(tot_text);
-                        c->resize(std::max(c->width(), label_command->width() + 10), c->height());
-                        return;
-                    }
-                }
+//                } else {
+//                    if (!isdigit(text.at(i).QChar::toLatin1()) || ((QString)text.at(i)).toInt() > text.size() / 2 || ((QString)text.at(i)).toInt() < 1)  {
+//                        tot_text = "Invalid input.\n" + pref + command;
+//                        label_command->resize(
+//                                (tot_text.size() - 14) * one_char_len,
+//                                label_command->height());
+//                        label_command->setText(tot_text);
+//                        c->resize(std::max(c->width(), label_command->width() + 10), c->height());
+//                        return;
+//                    }
+//                }
             }
             // submit  a command
             command = text;
@@ -107,14 +107,14 @@ int main(int argc, char* argv[]) {
     button_next->setGeometry(200, 0, 100, 50);
     QWidget::connect(button_next, &QPushButton::pressed, c, next_turn);
     button_next->show();
-    auto next_1000_turns = [&]() {
-        window.next(1000);
-    };
-    auto* button_next_1000 = new QPushButton("Next 1000", c);
-    button_next_1000->setGeometry(300, 0, 100, 50);
-    QWidget::connect(button_next_1000, &QPushButton::pressed, c, next_1000_turns);
-    button_next_1000->show();
     QString last_custom_number = "1000";
+    auto next_last_custom_turns = [&]() {
+        window.next(last_custom_number.toInt());
+    };
+    auto* button_next_last_custom = new QPushButton("Next " + last_custom_number, c);
+    button_next_last_custom->setGeometry(300, 0, 100, 50);
+    QWidget::connect(button_next_last_custom, &QPushButton::pressed, c, next_last_custom_turns);
+    button_next_last_custom->show();
     auto next_custom_turns = [&]() {
         bool ok;
         QString text = QInputDialog::getText(c, "Custom number of turns",
@@ -125,6 +125,7 @@ int main(int argc, char* argv[]) {
         if (ok && !text.isEmpty()) {
             if (isNum) {
                 last_custom_number = text;
+                button_next_last_custom->setText("Next " + last_custom_number);
                 window.next(value);
             } else {
                 QMessageBox msgBox;
@@ -139,6 +140,7 @@ int main(int argc, char* argv[]) {
     auto clear_field = [&]() {
         window.reset();
     };
+    // Clearing the field and quiting of all windows buttons
     auto* button_clear = new QPushButton("Clear", c);
     button_clear->setGeometry(500, 0, 100, 50);
     QWidget::connect(button_clear, &QPushButton::pressed, c, clear_field);

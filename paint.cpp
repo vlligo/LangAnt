@@ -19,17 +19,43 @@ void Colours::doPainting() {
 
 void Colours::next(int t) {
     QPainter painter(&pm);
-    painter.setPen(Qt::black);
-    painter.drawRect(0 + t / 10, 0 + t / 10, 100 + t / 100, 100 + t / 100);
-    update();
+    for (int _ = 0; _ < t; _++) {
+        int it = this->cols[std::make_pair(this->cur_x, this->cur_y)]/* * 2*/;
+        QChar c = this->command[it];
+        int col = (it + 1) % command.size();
+        this->cols[{cur_x, cur_y}] = col;
+        int cc = 255 - col * 240 / (this->command.size()/* / 2*/ - 1) - 15;
+        painter.fillRect(this->added_w + this->cur_x, this->added_h + this->cur_y, this->step, this->step, QColor(cc, cc, cc));
+        if (c == 'L') {
+            this->dir--;
+        } else {
+            this->dir++;
+        }
+        this->dir = (this->dir + 4) % 4;
+        if (this->dir == 0) {
+            this->cur_y -= this->step;
+        } else if (this->dir == 2) {
+            this->cur_y += this->step;
+        } else if (this->dir == 1) {
+            this->cur_x += this->step;
+        } else {
+            this->cur_x -= this->step;
+        }
+        update();
+    }
 }
 
 void Colours::reset() {
+    this->cur_x = 100;
+    this->cur_y = 100;
+    this->dir = 0;
+    this->added_h = 0;
+    this->added_w = 0;
+    this->cols = {};
     pm.fill();
     update();
 }
 
 void Colours::quit() {
-//    this->destroy();
     this->close();
 }
