@@ -137,12 +137,34 @@ int main(int argc, char* argv[]) {
     auto* button_next_custom = new QPushButton("Next custom", c);
     button_next_custom->setGeometry(400, 0, 100, 50);
     QWidget::connect(button_next_custom, &QPushButton::pressed, c, next_custom_turns);
+    // Clearing the field and quiting of all windows buttons
+    auto change_step = [&]() {
+        bool ok;
+        QString text = QInputDialog::getText(c, "The size of square",
+                                             "The size[px]:", QLineEdit::Normal,
+                                             (QString::number(window.step)), &ok);
+        bool isNum;
+        int value = text.toInt(&isNum);
+        if (ok && !text.isEmpty()) {
+            if (isNum) {
+                window.step = value;
+                window.reset();
+            } else {
+                QMessageBox msgBox;
+                msgBox.setText("Invalid number(" + text + ")");
+                msgBox.exec();
+            }
+        }
+    };
+    auto* button_step = new QPushButton("Change the size of square", c);
+    button_step->setGeometry(500, 0, 200, 50);
+    QWidget::connect(button_step, &QPushButton::pressed, c, change_step);
+    button_step->show();
     auto clear_field = [&]() {
         window.reset();
     };
-    // Clearing the field and quiting of all windows buttons
     auto* button_clear = new QPushButton("Clear", c);
-    button_clear->setGeometry(500, 0, 100, 50);
+    button_clear->setGeometry(700, 0, 100, 50);
     QWidget::connect(button_clear, &QPushButton::pressed, c, clear_field);
     button_clear->show();
     auto quit_all = [&]() {
@@ -150,7 +172,7 @@ int main(int argc, char* argv[]) {
         c->close();
     };
     auto* button_quit = new QPushButton("Quit", c);
-    button_quit->setGeometry(600, 0, 100, 50);
+    button_quit->setGeometry(800, 0, 100, 50);
     QWidget::connect(button_quit, &QPushButton::pressed, c, quit_all);
     button_quit->show();
     window.show();

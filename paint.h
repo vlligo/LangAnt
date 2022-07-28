@@ -8,7 +8,7 @@ class Colours : public QWidget {
 
 public:
     QString command;
-    int step = 5;
+    int step = 1;
     explicit Colours(QWidget *parent = nullptr);
     void next(int t);
     void reset();
@@ -20,7 +20,7 @@ private:
     int added_w = 0, added_h = 0;
     std::map<std::pair<int, int>, int> cols;
     int w = 10000, h = 10000;
-    int cur_x = 100, cur_y = 100;
+    int cur_x = 300, cur_y = 300;
     int dir = 0;
     QPixmap pm;
     void doPainting();

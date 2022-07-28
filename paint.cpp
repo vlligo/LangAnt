@@ -46,8 +46,8 @@ void Colours::next(int t) {
 }
 
 void Colours::reset() {
-    this->cur_x = 100;
-    this->cur_y = 100;
+    this->cur_x = 300;
+    this->cur_y = 300;
     this->dir = 0;
     this->added_h = 0;
     this->added_w = 0;
