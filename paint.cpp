@@ -41,8 +41,8 @@ void Colours::next(int t) {
         } else {
             this->cur_x -= this->step;
         }
-        update();
     }
+    update();
 }
 
 void Colours::reset() {
