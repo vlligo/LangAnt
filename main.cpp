@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
             window.command = text;
         }
     };
-    auto* button_read_new_command = new QPushButton("Enter a new command", c);
+    auto* button_read_new_command = new QPushButton("New command", c);
     button_read_new_command->resize(200, 50);
     QWidget::connect(button_read_new_command, &QPushButton::pressed, c, read_command);
     button_read_new_command->show();
