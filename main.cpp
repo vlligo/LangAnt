@@ -1,14 +1,3 @@
-//#include <QApplication>
-//#include <QPushButton>
-//
-//int main(int argc, char* argv[]) {
-//    QApplication a(argc, argv);
-//    QPushButton button("Hello world!", nullptr);
-//    button.resize(200, 100);
-//    button.show();
-//    return QApplication::exec();
-//}
-
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
@@ -51,18 +40,8 @@ int main(int argc, char* argv[]) {
         if (ok && !text.isEmpty()) {
             QString tot_text = pref + text;
             // check if command is invalid
-//            if (text.size() % 2 == 1) {
-//                tot_text = "Invalid input.\n" + pref + command;
-//                label_command->resize(
-//                        (tot_text.size() - 14) * one_char_len,
-//                        label_command->height());
-//                label_command->setText(tot_text);
-//                c->resize(std::max(c->width(), label_command->width() + 10), c->height());
-//                return;
-//            }
-            for (auto i = 0; i < (int)text.size(); i++) {
-//                if (i % 2 == 0) {
-                    if (text[i] != 'L' && text[i] != 'R') {
+            for (auto && i : text) {
+                    if (i != 'L' && i != 'R' && i != 'F' && i != 'B') {
                         tot_text = "Invalid input.\n" + pref + command;
                         label_command->resize(
                                 (tot_text.size() - 14) * one_char_len,
@@ -71,17 +50,6 @@ int main(int argc, char* argv[]) {
                         c->resize(std::max(c->width(), label_command->width() + 10), c->height());
                         return;
                     }
-//                } else {
-//                    if (!isdigit(text.at(i).QChar::toLatin1()) || ((QString)text.at(i)).toInt() > text.size() / 2 || ((QString)text.at(i)).toInt() < 1)  {
-//                        tot_text = "Invalid input.\n" + pref + command;
-//                        label_command->resize(
-//                                (tot_text.size() - 14) * one_char_len,
-//                                label_command->height());
-//                        label_command->setText(tot_text);
-//                        c->resize(std::max(c->width(), label_command->width() + 10), c->height());
-//                        return;
-//                    }
-//                }
             }
             // submit  a command
             command = text;

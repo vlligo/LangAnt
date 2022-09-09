@@ -28,8 +28,10 @@ void Colours::next(int t) {
         painter.fillRect(this->added_w + this->cur_x, this->added_h + this->cur_y, this->step, this->step, QColor(cc, cc, cc));
         if (c == 'L') {
             this->dir--;
-        } else {
+        } else if (c == 'R') {
             this->dir++;
+        } else if (c == 'B') {
+            this->dir += 2;
         }
         this->dir = (this->dir + 4) % 4;
         if (this->dir == 0) {
