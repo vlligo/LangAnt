@@ -15,6 +15,15 @@ bool isdigit(char ch) {
     return std::isdigit(static_cast<unsigned char>(ch));
 }
 
+int get_num(const QString& text, int l, int r) {
+    int ans = 0;
+    for (int i = l; i < r; i++) {
+        ans *= 10;
+        ans += text.at(i).toLatin1() - '0';
+    }
+    return ans;
+}
+
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
 
@@ -25,8 +34,8 @@ int main(int argc, char* argv[]) {
     window.setWindowTitle("Ant field");
 
     auto* label_command = new QLabel(c);
-    QString command = "RL";
-    window.command = command;
+    QString command = "R 1; L 1;";
+    window.command = "RL";
     QString pref = "Current command is: ";
     label_command->setText(pref + command);
     label_command->setAlignment(Qt::AlignBottom | Qt::AlignRight);
@@ -39,9 +48,14 @@ int main(int argc, char* argv[]) {
                                              command, &ok);
         if (ok && !text.isEmpty()) {
             QString tot_text = pref + text;
-            // check if command is invalid
-            for (auto && i : text) {
-                    if (i != 'L' && i != 'R' && i != 'F' && i != 'B') {
+            // check that command is valid
+            int st = -1;
+            QString long_c = "";
+            QChar curr_command;
+            for (int j = 0; j < (int)text.size(); j++) {
+                QChar i = text[j];
+                if (i == ' ') {
+                    if (st != -1 && isdigit(text.at(st).toLatin1())) {
                         tot_text = "Invalid input.\n" + pref + command;
                         label_command->resize(
                                 (tot_text.size() - 14) * one_char_len,
@@ -50,6 +64,49 @@ int main(int argc, char* argv[]) {
                         c->resize(std::max(c->width(), label_command->width() + 10), c->height());
                         return;
                     }
+                    continue;
+                }
+                if (i == 'L' || i == 'R' || i == 'F' || i == 'B') {
+                    if (st != -1) {
+                        tot_text = "Invalid input.\n" + pref + command;
+                        label_command->resize(
+                                (tot_text.size() - 14) * one_char_len,
+                                label_command->height());
+                        label_command->setText(tot_text);
+                        c->resize(std::max(c->width(), label_command->width() + 10), c->height());
+                        return;
+                    }
+                    curr_command = i;
+                    st = j;
+                }
+                if (isdigit(i.toLatin1()))
+                    st = j;
+                if (i == ';') {
+                    if (st == -1) {
+                        tot_text = "Invalid input.\n" + pref + command;
+                        label_command->resize(
+                                (tot_text.size() - 14) * one_char_len,
+                                label_command->height());
+                        label_command->setText(tot_text);
+                        c->resize(std::max(c->width(), label_command->width() + 10), c->height());
+                        return;
+                    } else {
+                        int count = get_num(text, st, j);
+                        for (int _ = 0; _ < count; _++) {
+                            long_c += curr_command;
+                        }
+                        st = -1;
+                    }
+                }
+            }
+            if (st != -1) {
+                tot_text = "Invalid input.\n" + pref + command;
+                label_command->resize(
+                        (tot_text.size() - 14) * one_char_len,
+                        label_command->height());
+                label_command->setText(tot_text);
+                c->resize(std::max(c->width(), label_command->width() + 10), c->height());
+                return;
             }
             // submit  a command
             command = text;
@@ -57,7 +114,7 @@ int main(int argc, char* argv[]) {
             label_command->resize(tot_text.size() * one_char_len, label_command->height());
             c->resize(std::max(c->width(), label_command->width() + 10), c->height());
             window.reset();
-            window.command = text;
+            window.command = long_c;
         }
     };
     auto* button_read_new_command = new QPushButton("New command", c);
@@ -75,7 +132,7 @@ int main(int argc, char* argv[]) {
     button_next->setGeometry(200, 0, 100, 50);
     QWidget::connect(button_next, &QPushButton::pressed, c, next_turn);
     button_next->show();
-    QString last_custom_number = "1000";
+    QString last_custom_number = "1000000";
     auto next_last_custom_turns = [&]() {
         window.next(last_custom_number.toInt());
     };
